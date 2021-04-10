@@ -60,3 +60,14 @@
 .header-optionLine3 {
   font-size: 10px;
 }
+
+.header-optionBasket {
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.header-basketCount {
+  margin-left: 10px;
+  margin-right: 10px;
+}
