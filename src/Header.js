@@ -2,15 +2,21 @@ import React from "react";
 import "./Header.css";
 import SearchIcon from "@material-ui/icons/Search";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
+import { Link } from "react-router-dom";
+import { useStateValue } from "./StateProvider";
 
 function header() {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [{ basket }, dispatch] = useStateValue();
+
   return (
     <div className="header">
-      <img
-        className="header-logo"
-        src="http://pngimg.com/uploads/amazon/amazon_PNG11.png"
-      />
-
+      <Link to="/">
+        <img
+          className="header-logo"
+          src="http://pngimg.com/uploads/amazon/amazon_PNG11.png"
+        />
+      </Link>
       <div className="header-search">
         <input className="header-searchInput" type="text" />
         <SearchIcon className="header-searchIcon" />
@@ -30,10 +36,15 @@ function header() {
           <span className="header-optionLine1">Your</span>
           <span className="header-optionLine2">Prime</span>
         </div>
-        <div className="header-optionBasket">
-          <ShoppingBasketIcon />
-          <span className="header-optionLine2 header-basetCount">0</span>
-        </div>
+
+        <Link to="/checkout">
+          <div className="header-optionBasket">
+            <ShoppingBasketIcon />
+            <span className="header-optionLine2 header-basetCount">
+              {basket?.length}
+            </span>
+          </div>
+        </Link>
       </div>
     </div>
   );
