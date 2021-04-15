@@ -39,12 +39,14 @@ function Home() {
             rating={3}
           />
           <Product
+            id="4355212"
             title="Echo Dot (3rd Gen) - Smart speaker with Alexa - Charcoal"
             price={39.99}
             image="https://images-na.ssl-images-amazon.com/images/I/6182S7MYC2L._AC_SL1000_.jpg"
             rating={5}
           />
           <Product
+            id="4334534"
             title="New Apple iPad (10.2-inch, Wi-Fi + Cellular, 128GB) - Gold (Latest Model, 8th Generation)"
             price={559.0}
             image="https://images-na.ssl-images-amazon.com/images/I/7194qXxwJQL._AC_SL1500_.jpg"
@@ -54,7 +56,7 @@ function Home() {
 
         <div className="home-row">
           <Product
-            id="4903850"
+            id="4334636"
             title="Samsung LC49RG90SSUXEN 49' Curved LED Gaming Monitor"
             price={199.99}
             image="https://images-na.ssl-images-amazon.com/images/I/41%2BCXFgQwjL._AC_SX466_.jpg"

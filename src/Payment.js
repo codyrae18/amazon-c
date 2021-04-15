@@ -8,6 +8,7 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { getBasketTotal } from "./reducer";
 import { HistorySharp } from "@material-ui/icons";
 import axios from "./axios";
+import { db } from "./firebase";
 
 function Payment() {
   const [{ basket, user }, dispatch] = useStateValue();
@@ -34,6 +35,8 @@ function Payment() {
     getClientSecret();
   }, [basket]);
 
+  console.log("client secreeeet ->>>> ", clientSecret);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setProcessing(true);
@@ -45,9 +48,20 @@ function Payment() {
         },
       })
       .then(({ paymentIntent }) => {
+        db.collection("users")
+          .doc(user?.uid)
+          .collection("orders")
+          .doc(paymentIntent.id)
+          .set({
+            basket: basket,
+            amount: paymentIntent.amount,
+            created: paymentIntent.created,
+          });
+
         setSucceeded(true);
         setError(null);
         setProcessing(false);
+        dispatch({ type: "EMPTY_BASKET" });
 
         history.replace("/orders");
       });
@@ -92,26 +106,27 @@ function Payment() {
         <div className="payment-section">
           <div className="payment-title">
             <h3>Payment Method</h3>
-            <div className="payment-details">
-              <form onSubmit={handleSubmit}>
-                <CardElement onChange={handleChange} />
-                <div className="payment-priceContainer">
-                  <CurrencyFormat
-                    renderText={(value) => <h3>Order Total: {value} </h3>}
-                    decimalScale={2}
-                    value={getBasketTotal(basket)}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={"$"}
-                  />
-                  <button disabled={processing || disabled || succeeded}>
-                    <span>{processing ? <p> Processing</p> : "Buy now"} </span>
-                  </button>
-                </div>
+          </div>
 
-                {error && <div>{error}</div>}
-              </form>
-            </div>
+          <div className="payment-details">
+            <form onSubmit={handleSubmit}>
+              <CardElement onChange={handleChange} />
+              <div className="payment-priceContainer">
+                <CurrencyFormat
+                  renderText={(value) => <h3>Order Total: {value} </h3>}
+                  decimalScale={2}
+                  value={getBasketTotal(basket)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"$"}
+                />
+                <button disabled={processing || disabled || succeeded}>
+                  <span>{processing ? <p> Processing</p> : "Buy now"} </span>
+                </button>
+              </div>
+
+              {error && <div>{error}</div>}
+            </form>
           </div>
         </div>
       </div>
